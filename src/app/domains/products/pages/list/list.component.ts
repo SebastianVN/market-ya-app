@@ -2,7 +2,6 @@ import {
   Component,
   inject,
   signal,
-  OnInit,
   OnChanges,
   input,
 } from '@angular/core';
@@ -15,6 +14,7 @@ import { CartService } from '@shared/services/cart.service';
 import { ProductService } from '@shared/services/product.service';
 import { CategoryService } from '@shared/services/category.service';
 import { Category } from '@shared/models/category.model';
+import { toSignal, rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-list',
@@ -26,19 +26,18 @@ import { Category } from '@shared/models/category.model';
   ],
   templateUrl: './list.component.html',
 })
-export default class ListComponent implements OnInit, OnChanges {
+export default class ListComponent implements OnChanges {
   private cartService = inject(CartService);
   private productService = inject(ProductService);
   private categoryService = inject(CategoryService);
   readonly slug = input<string>();
   products = signal<Product[]>([]);
-  categories = toSignal(this.categoryService.getCategoriesColombina(), {
+  categories = toSignal(this.categoryService.getAll(), {
     initialValue: [] as Category[],
   });
-
-  ngOnInit() {
-    this.getCategories();
-  }
+  categoriesResources = rxResource({
+    loader: () => this.categoryService.getAll(),
+  });
 
   ngOnChanges() {
     this.getProducts();
@@ -59,15 +58,11 @@ export default class ListComponent implements OnInit, OnChanges {
     });
   }
 
-  private getCategories() {
-    return this.categories.set(this.categoryService.getCategoriesColombina());
-    // this.categoryService.getAll().subscribe({
-    //   next: categories => {
-    //     this.categories.set(categories);
-    //   },
-    //   error: () => {
-    //     throw new Error();
-    //   },
-    // });
+  resetCategory() {
+    this.categoriesResources.set([]);
+  }
+
+  reloadCategories() {
+    this.categoriesResources.reload();
   }
 }

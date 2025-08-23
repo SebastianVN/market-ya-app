@@ -16,13 +16,6 @@ export class CategoryService {
   }
 
   getCategoriesColombina() {
-    return categories.map(category => {
-      return {
-        id: category.id,
-        name: category.name,
-        image: category.image,
-        slug: category.slug,
-      } as Category;
-    });
+    return categories;
   }
 }
