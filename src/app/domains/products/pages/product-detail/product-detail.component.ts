@@ -30,15 +30,9 @@ export default class ProductDetailComponent implements OnInit {
   private cartService = inject(CartService);
   ngOnInit() {
     const id = this.id();
-    if (id) {
-      this.productService.getOne(id).subscribe({
-        next: product => {
-          this.$product.set(product);
-          if (product.images.length > 0) {
-            this.$cover.set(product.images[0]);
-          }
-        },
-      });
+    if (id != null && id !== '') {
+      this.productService.getOneColombina(id);
+      this.$product.set(this.productService.getOneColombina(id));
     }
   }
 

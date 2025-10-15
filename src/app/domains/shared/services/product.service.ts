@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Product } from '../models/product.model';
+import { products } from '../../const/products.const';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,8 @@ export class ProductService {
     return this.http.get<Product>(
       `https://api.escuelajs.co/api/v1/products/${id}`
     );
+  }
+  getOneColombina(id: string) {
+    return products.find(item => item.id === parseInt(id, 10)) || null;
   }
 }

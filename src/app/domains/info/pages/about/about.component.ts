@@ -12,8 +12,6 @@ import { WaveAudioComponent } from '@info/components/wave-audio/wave-audio.compo
     CommonModule,
     CounterComponent,
     WaveAudioComponent,
-    HighlightDirective,
-    HeaderComponent,
   ],
   templateUrl: './about.component.html',
 })
